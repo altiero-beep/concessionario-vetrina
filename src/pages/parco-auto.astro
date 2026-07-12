@@ -1,0 +1,116 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CarCard from "../components/CarCard.astro";
+import { getCars, uniqueValues } from "../lib/cars";
+import { getDealer } from "../lib/dealer";
+
+const dealer = await getDealer();
+const cars = await getCars();
+const marche = uniqueValues(cars, "marca");
+const carburanti = uniqueValues(cars, "carburante");
+const cambi = uniqueValues(cars, "cambio");
+---
+
+<BaseLayout
+  title={`Parco auto — ${dealer.nome} Venafro`}
+  description="Parco auto B.Car a Venafro: filtri per marca, prezzo, carburante e cambio."
+  current="parco-auto"
+>
+  <main class="container">
+    <header class="page-header">
+      <p class="section__eyebrow">Parco auto</p>
+      <h1 class="section__title">Tutte le auto disponibili</h1>
+      <p class="section__lead">
+        Filtra per marca, prezzo e caratteristiche. Ogni scheda include foto, prezzo, chilometraggio e specifiche tecniche.
+      </p>
+    </header>
+
+    <form class="filters" id="filters-form">
+      <label>
+        Marca
+        <select id="filter-marca" name="marca">
+          <option value="">Tutte</option>
+          {marche.map((value) => <option value={value}>{value}</option>)}
+        </select>
+      </label>
+      <label>
+        Carburante
+        <select id="filter-carburante" name="carburante">
+          <option value="">Tutti</option>
+          {carburanti.map((value) => <option value={value}>{value}</option>)}
+        </select>
+      </label>
+      <label>
+        Cambio
+        <select id="filter-cambio" name="cambio">
+          <option value="">Tutti</option>
+          {cambi.map((value) => <option value={value}>{value}</option>)}
+        </select>
+      </label>
+      <label>
+        Prezzo max (€)
+        <input type="number" id="filter-prezzo" name="prezzoMax" min="0" step="500" placeholder="Es. 20000" />
+      </label>
+      <div class="filters__actions">
+        <button type="submit" class="btn btn--primary btn--small">Filtra</button>
+        <button type="reset" class="btn btn--ghost btn--small" id="reset-filters">Reset</button>
+      </div>
+    </form>
+
+    <p class="results-count" id="results-count">
+      {cars.length === 1 ? "1 veicolo trovato" : `${cars.length} veicoli trovati`}
+    </p>
+    <div class="car-grid" id="car-grid">
+      {cars.map((car) => <CarCard car={car} />)}
+    </div>
+  </main>
+
+  <script>
+    function getFilters() {
+      const form = document.getElementById("filters-form") as HTMLFormElement;
+      const data = new FormData(form);
+      return {
+        marca: String(data.get("marca") || ""),
+        carburante: String(data.get("carburante") || ""),
+        cambio: String(data.get("cambio") || ""),
+        prezzoMax: Number(data.get("prezzoMax")) || null,
+      };
+    }
+
+    function applyFilters() {
+      const filters = getFilters();
+      const cards = document.querySelectorAll<HTMLElement>(".car-card");
+      let visible = 0;
+
+      cards.forEach((card) => {
+        const marca = card.dataset.marca || "";
+        const carburante = card.dataset.carburante || "";
+        const cambio = card.dataset.cambio || "";
+        const prezzo = Number(card.dataset.prezzo || 0);
+
+        const match =
+          (!filters.marca || marca === filters.marca) &&
+          (!filters.carburante || carburante === filters.carburante) &&
+          (!filters.cambio || cambio === filters.cambio) &&
+          (!filters.prezzoMax || prezzo <= filters.prezzoMax);
+
+        card.style.display = match ? "" : "none";
+        if (match) visible++;
+      });
+
+      const count = document.getElementById("results-count");
+      if (count) {
+        count.textContent = visible === 1 ? "1 veicolo trovato" : `${visible} veicoli trovati`;
+      }
+    }
+
+    document.getElementById("filters-form")?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      applyFilters();
+    });
+
+    document.getElementById("reset-filters")?.addEventListener("click", () => {
+      setTimeout(applyFilters, 0);
+    });
+  </script>
+</BaseLayout>

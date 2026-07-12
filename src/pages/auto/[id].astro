@@ -1,0 +1,104 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCars } from "../../lib/cars";
+import { getDealer } from "../../lib/dealer";
+import { formatPrice, formatKm, getCarTitle } from "../../lib/format";
+
+export async function getStaticPaths() {
+  const cars = await getCars();
+  return cars.map((car) => ({
+    params: { id: car.id },
+    props: { car },
+  }));
+}
+
+const { car } = Astro.props;
+const dealer = await getDealer();
+const title = getCarTitle(car);
+const waText = encodeURIComponent(
+  `Buongiorno, sono interessato a ${title} (${car.anno}) — ${formatPrice(car.prezzo)}. Vorrei maggiori informazioni.`
+);
+const waLink = `https://wa.me/${dealer.whatsapp}?text=${waText}`;
+---
+
+<BaseLayout
+  title={`${title} — ${dealer.nome}`}
+  description={`${title} — ${formatPrice(car.prezzo)}, ${formatKm(car.km)}. Scheda completa con foto e specifiche tecniche.`}
+  current="parco-auto"
+>
+  <main class="container section--tight">
+    <nav class="breadcrumb">
+      <a href="/">Home</a> / <a href="/parco-auto/">Parco auto</a> / {car.modello}
+    </nav>
+
+    <div class="detail-layout">
+      <div class="gallery">
+        <div class="gallery__main">
+          <img id="gallery-main" src={car.immagini[0]} alt={title} />
+        </div>
+        {
+          car.immagini.length > 1 && (
+            <div class="gallery__thumbs">
+              {car.immagini.map((src, index) => (
+                <button
+                  type="button"
+                  class:list={["gallery__thumb", { "is-active": index === 0 }]}
+                  data-src={src}
+                  aria-label={`Foto ${index + 1}`}
+                >
+                  <img src={src} alt="" />
+                </button>
+              ))}
+            </div>
+          )
+        }
+      </div>
+
+      <aside class="detail-panel">
+        <p class="detail-panel__brand">{car.marca}</p>
+        <h1 class="detail-panel__title">{car.modello}</h1>
+        <p class="detail-panel__version">{car.versione} · {car.anno}</p>
+        <p class="detail-panel__price">{formatPrice(car.prezzo)}</p>
+
+        <div class="detail-panel__actions">
+          <a href={waLink} class="btn btn--primary" target="_blank" rel="noopener">Scrivi su WhatsApp</a>
+          <a href={`/contatti/?auto=${car.id}`} class="btn btn--ghost">Richiedi informazioni</a>
+          <a href={`tel:${dealer.telefono}`} class="btn btn--ghost">Chiama ora</a>
+        </div>
+
+        <dl class="spec-table">
+          <div class="spec-table__row"><dt>Chilometraggio</dt><dd>{formatKm(car.km)}</dd></div>
+          <div class="spec-table__row"><dt>Anno</dt><dd>{car.anno}</dd></div>
+          <div class="spec-table__row"><dt>Carburante</dt><dd>{car.carburante}</dd></div>
+          <div class="spec-table__row"><dt>Cambio</dt><dd>{car.cambio}</dd></div>
+          <div class="spec-table__row"><dt>Potenza</dt><dd>{car.potenza}</dd></div>
+          <div class="spec-table__row"><dt>Cilindrata</dt><dd>{car.cilindrata}</dd></div>
+          <div class="spec-table__row"><dt>Colore</dt><dd>{car.colore}</dd></div>
+          <div class="spec-table__row"><dt>Porte</dt><dd>{car.porte}</dd></div>
+          <div class="spec-table__row"><dt>Posti</dt><dd>{car.posti}</dd></div>
+          <div class="spec-table__row"><dt>Trazione</dt><dd>{car.trazione}</dd></div>
+          {car.consumo && <div class="spec-table__row"><dt>Consumo</dt><dd>{car.consumo}</dd></div>}
+          {car.emissioni && <div class="spec-table__row"><dt>Emissioni CO₂</dt><dd>{car.emissioni}</dd></div>}
+          {car.classeEmissioni && <div class="spec-table__row"><dt>Classe emissioni</dt><dd>{car.classeEmissioni}</dd></div>}
+        </dl>
+      </aside>
+    </div>
+
+    <section class="description-block">
+      <h2>Descrizione</h2>
+      <p>{car.descrizione}</p>
+    </section>
+  </main>
+
+  <script>
+    document.querySelectorAll(".gallery__thumb").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const src = (btn as HTMLButtonElement).dataset.src;
+        const main = document.getElementById("gallery-main") as HTMLImageElement;
+        if (src && main) main.src = src;
+        document.querySelectorAll(".gallery__thumb").forEach((el) => el.classList.remove("is-active"));
+        btn.classList.add("is-active");
+      });
+    });
+  </script>
+</BaseLayout>

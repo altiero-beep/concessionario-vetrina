@@ -1,0 +1,151 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCars } from "../lib/cars";
+import { getDealer } from "../lib/dealer";
+import { formatPrice, getCarTitle } from "../lib/format";
+
+const dealer = await getDealer();
+const cars = await getCars();
+---
+
+<BaseLayout
+  title={`Contatti — ${dealer.nome} Venafro`}
+  description="Contatta B.Car a Venafro: telefono, WhatsApp e modulo per info su auto usate e permute."
+  current="contatti"
+>
+  <main class="container">
+    <header class="page-header">
+      <p class="section__eyebrow">Contatti</p>
+      <h1 class="section__title">Parliamo della tua prossima auto</h1>
+      <p class="section__lead">
+        Telefono, WhatsApp o modulo: scegli come preferisci. Rispondiamo il prima possibile.
+      </p>
+    </header>
+
+    <div class="contact-grid">
+      <section class="contact-card">
+        <h3>Dati concessionaria</h3>
+        <ul class="contact-list">
+          <li>
+            <strong>Indirizzo</strong>
+            <span>{dealer.indirizzo}</span>
+          </li>
+          <li>
+            <strong>Cellulare</strong>
+            <a href={`tel:${dealer.telefono}`}>{dealer.telefonoDisplay}</a>
+          </li>
+          <li>
+            <strong>Telefono fisso</strong>
+            <a href={`tel:${dealer.telefonoSecondario}`}>{dealer.telefonoSecondarioDisplay}</a>
+          </li>
+          {
+            dealer.email && (
+              <li>
+                <strong>Email</strong>
+                <a href={`mailto:${dealer.email}`}>{dealer.email}</a>
+              </li>
+            )
+          }
+          <li>
+            <strong>WhatsApp</strong>
+            <a href={`https://wa.me/${dealer.whatsapp}`} target="_blank" rel="noopener">Scrivici su WhatsApp</a>
+          </li>
+          <li>
+            <strong>Noleggio</strong>
+            <span>Disponibile noleggio a medio-lungo termine da concordare in sede.</span>
+          </li>
+          <li>
+            <strong>Orari</strong>
+            <span set:html={dealer.orari.join("<br />")} />
+          </li>
+        </ul>
+      </section>
+
+      <section class="contact-card">
+        <h3>Richiedi informazioni</h3>
+        <form class="contact-form" id="contact-form">
+          <label>
+            Nome e cognome
+            <input type="text" name="nome" required placeholder="Mario Rossi" />
+          </label>
+          <label>
+            Telefono
+            <input type="tel" name="telefono" required placeholder="333 1234567" />
+          </label>
+          <label>
+            Email
+            <input type="email" name="email" placeholder="mario@email.it" />
+          </label>
+          <label>
+            Motivo del contatto
+            <select name="auto" id="contact-auto">
+              <option value="">Informazioni generali</option>
+              <option value="noleggio">Noleggio medio-lungo termine</option>
+              {cars.map((car) => (
+                <option value={car.id}>
+                  {getCarTitle(car)} ({car.anno}) — {formatPrice(car.prezzo)}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Messaggio
+            <textarea name="messaggio" required placeholder="Vorrei info su disponibilità, permuta o prova su strada..."></textarea>
+          </label>
+          <button type="submit" class="btn btn--primary">Invia richiesta</button>
+          <p id="form-feedback" style="color: var(--text-muted); font-size: 0.9rem; margin: 0"></p>
+        </form>
+      </section>
+    </div>
+
+    <div class="map-wrap">
+      <iframe
+        title="Mappa concessionaria"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen
+        src={dealer.mappaEmbed}
+      />
+    </div>
+  </main>
+
+  <script define:vars={{ dealerEmail: dealer.email, dealerNome: dealer.nome, dealerWhatsapp: dealer.whatsapp }}>
+    const form = document.getElementById("contact-form");
+    const autoSelect = document.getElementById("contact-auto");
+    const feedback = document.getElementById("form-feedback");
+
+    const params = new URLSearchParams(window.location.search);
+    const autoId = params.get("auto");
+    const tipo = params.get("tipo");
+    if (autoId && autoSelect) autoSelect.value = autoId;
+    if (tipo === "noleggio" && autoSelect) autoSelect.value = "noleggio";
+
+    form?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const nome = data.get("nome");
+      const telefono = data.get("telefono");
+      const autoOption = autoSelect?.selectedOptions[0]?.textContent || "Informazioni generali";
+      const messaggio = data.get("messaggio");
+
+      const testo = `Richiesta da ${nome}\nTelefono: ${telefono}\nAuto: ${autoOption}\n\n${messaggio}`;
+
+      if (dealerEmail) {
+        const body = encodeURIComponent(testo);
+        const subject = encodeURIComponent(`Richiesta info — ${dealerNome}`);
+        window.location.href = `mailto:${dealerEmail}?subject=${subject}&body=${body}`;
+        if (feedback) {
+          feedback.textContent =
+            "Si aprirà il client email con il messaggio pronto. Se preferisci, contattaci anche via WhatsApp.";
+        }
+        return;
+      }
+
+      const waText = encodeURIComponent(`Buongiorno, sono ${nome} (${telefono}).\n\nAuto: ${autoOption}\n\n${messaggio}`);
+      window.open(`https://wa.me/${dealerWhatsapp}?text=${waText}`, "_blank", "noopener");
+      if (feedback) {
+        feedback.textContent = "Si aprirà WhatsApp con il messaggio pronto da inviare.";
+      }
+    });
+  </script>
+</BaseLayout>

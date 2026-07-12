@@ -1,0 +1,39 @@
+---
+import type { Car } from "../lib/types";
+import { formatPrice, formatKm, getCarTitle, getCarUrl } from "../lib/format";
+
+interface Props {
+  car: Car;
+}
+
+const { car } = Astro.props;
+const title = getCarTitle(car);
+const url = getCarUrl(car);
+---
+
+<article
+  class="car-card"
+  data-marca={car.marca}
+  data-carburante={car.carburante}
+  data-cambio={car.cambio}
+  data-prezzo={car.prezzo}
+>
+  <a href={url} class="car-card__image-link">
+    <img src={car.immagini[0]} alt={title} loading="lazy" />
+    <span class="car-card__year">{car.anno}</span>
+  </a>
+  <div class="car-card__body">
+    <p class="car-card__brand">{car.marca}</p>
+    <h3 class="car-card__title"><a href={url}>{car.modello}</a></h3>
+    <p class="car-card__version">{car.versione}</p>
+    <ul class="car-card__specs">
+      <li>{formatKm(car.km)}</li>
+      <li>{car.carburante}</li>
+      <li>{car.cambio}</li>
+    </ul>
+    <div class="car-card__footer">
+      <span class="car-card__price">{formatPrice(car.prezzo)}</span>
+      <a href={url} class="btn btn--small">Dettagli</a>
+    </div>
+  </div>
+</article>

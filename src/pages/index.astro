@@ -1,0 +1,125 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CarCard from "../components/CarCard.astro";
+import { getCars, getFeaturedCars } from "../lib/cars";
+import { getDealer } from "../lib/dealer";
+
+const dealer = await getDealer();
+const cars = await getCars();
+const featured = await getFeaturedCars(3);
+---
+
+<BaseLayout
+  title={`${dealer.nome} — Concessionaria auto a Venafro (IS)`}
+  description="B.Car Venafro — concessionaria auto usate e nuove. Parco auto, noleggio medio-lungo termine. Via Campania 192-194."
+  current="home"
+>
+  <main>
+    <section class="hero">
+      <div class="hero__bg" aria-hidden="true"></div>
+      <div class="container hero__content">
+        <p class="hero__eyebrow">{dealer.tagline}</p>
+        <h1 class="hero__title">La tua prossima auto, scelta con cura</h1>
+        <p class="hero__text">
+          Concessionaria a Venafro con veicoli controllati, prezzi chiari e tutte le specifiche tecniche.
+          Vieni in sede in Via Campania o contattaci per una prova su strada.
+        </p>
+        <div class="hero__actions">
+          <a href="/parco-auto/" class="btn btn--primary">Vedi parco auto</a>
+          <a href="/contatti/" class="btn btn--ghost">Contattaci</a>
+        </div>
+        <div class="hero__stats">
+          <div class="hero__stat">
+            <strong>{cars.length}</strong>
+            <span>Auto disponibili</span>
+          </div>
+          <div class="hero__stat">
+            <strong>100%</strong>
+            <span>Prezzi trasparenti</span>
+          </div>
+          <div class="hero__stat">
+            <strong>Prova</strong>
+            <span>Su strada su appuntamento</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <p class="section__eyebrow">In evidenza</p>
+        <h2 class="section__title">Veicoli selezionati</h2>
+        <p class="section__lead">Una selezione delle auto più richieste del momento nel nostro parco.</p>
+        <div class="car-grid" style="margin-top: 2.5rem">
+          {
+            featured.length > 0 ? (
+              featured.map((car) => <CarCard car={car} />)
+            ) : (
+              <p class="empty-state">Nessun veicolo in evidenza al momento.</p>
+            )
+          }
+        </div>
+        <div style="margin-top: 2rem; text-align: center">
+          <a href="/parco-auto/" class="btn btn--ghost">Vedi tutte le auto</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--tight">
+      <div class="container">
+        <div class="features">
+          <article class="feature">
+            <div class="feature__icon">✓</div>
+            <h3>Veicoli controllati</h3>
+            <p>Ogni auto viene verificata prima della messa in vetrina, con chilometraggio e stato documentati.</p>
+          </article>
+          <article class="feature">
+            <div class="feature__icon">€</div>
+            <h3>Prezzi chiari</h3>
+            <p>Niente sorprese: prezzo visibile, specifiche complete e possibilità di permuta.</p>
+          </article>
+          <article class="feature">
+            <div class="feature__icon">☎</div>
+            <h3>Assistenza diretta</h3>
+            <p>Parla con noi via telefono o WhatsApp per info, preventivi e appuntamenti.</p>
+          </article>
+          <article class="feature">
+            <div class="feature__icon">📅</div>
+            <h3>Noleggio</h3>
+            <p>Soluzioni a medio-lungo termine disponibili: condizioni e veicoli da concordare in sede.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--tight" id="noleggio">
+      <div class="container">
+        <div class="rental-band">
+          <div>
+            <p class="section__eyebrow">Noleggio</p>
+            <h2 class="section__title">Noleggio a medio-lungo termine</h2>
+            <p class="rental-band__highlight">
+              Disponibile noleggio a medio-lungo termine da concordare in sede.
+            </p>
+            <p class="rental-band__note">
+              Passa in concessionaria in Via Campania o contattaci per valutare durata, veicolo e condizioni più adatte alle tue esigenze.
+            </p>
+          </div>
+          <a href="/contatti/?tipo=noleggio" class="btn btn--primary">Contattaci</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="cta-band">
+          <div>
+            <h2>Hai trovato l'auto giusta?</h2>
+            <p>Scrivici o chiamaci: ti rispondiamo con disponibilità, permuta e appuntamento per la prova.</p>
+          </div>
+          <a href="/contatti/" class="btn btn--primary">Vai ai contatti</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

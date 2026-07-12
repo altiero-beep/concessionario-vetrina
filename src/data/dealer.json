@@ -1,0 +1,17 @@
+{
+  "nome": "B.Car",
+  "tagline": "Auto nuove e usate a Venafro",
+  "telefono": "+393485853369",
+  "telefonoDisplay": "348 5853369",
+  "telefonoSecondario": "+390865221802",
+  "telefonoSecondarioDisplay": "0865 221802",
+  "email": "",
+  "whatsapp": "393485853369",
+  "indirizzo": "Via Campania 192-194, 86079 Venafro (IS)",
+  "orari": [
+    "Lun–Ven: 9:00 – 19:00",
+    "Sabato: 9:00 – 13:00",
+    "Domenica: chiuso"
+  ],
+  "mappaEmbed": "https://maps.google.com/maps?q=Via+Campania+192,+86079+Venafro+IS&hl=it&z=16&output=embed"
+}
