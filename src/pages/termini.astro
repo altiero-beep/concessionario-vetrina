@@ -1,0 +1,108 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getDealer } from "../lib/dealer";
+
+const dealer = await getDealer();
+const lastUpdate = "27 luglio 2026";
+---
+
+<BaseLayout
+  title={`Termini e condizioni — ${dealer.nome}`}
+  description={`Termini e condizioni d'uso del sito web di ${dealer.nome}, concessionaria auto a Venafro.`}
+>
+  <main class="container legal-page">
+    <header class="page-header">
+      <p class="section__eyebrow">Legale</p>
+      <h1 class="section__title">Termini e condizioni</h1>
+      <p class="section__lead">Ultimo aggiornamento: {lastUpdate}</p>
+    </header>
+
+    <article class="legal-content">
+      <p>
+        I presenti Termini e condizioni regolano l’accesso e l’utilizzo del sito web{" "}
+        <strong>bcarvenafro.com</strong> (di seguito, “Sito”), gestito da{" "}
+        <strong>{dealer.nome}</strong>, con sede in {dealer.indirizzo}. L’utilizzo del Sito
+        implica l’accettazione integrale dei presenti Termini.
+      </p>
+
+      <h2>1. Oggetto del Sito</h2>
+      <p>
+        Il Sito ha finalità informativa e promozionale: presenta il parco auto, i servizi della
+        concessionaria (vendita veicoli, noleggio medio-lungo termine, permute) e consente di
+        contattare {dealer.nome} per richieste di informazioni o appuntamenti.
+      </p>
+
+      <h2>2. Informazioni sui veicoli</h2>
+      <p>
+        Descrizioni, prezzi, chilometraggi, optional, immagini e disponibilità dei veicoli
+        pubblicati sul Sito hanno valore puramente indicativo e non costituiscono proposta
+        contrattuale. Eventuali errori materiali o aggiornamenti del parco auto possono
+        verificarsi: le condizioni definitive vanno sempre confermate in sede o per iscritto
+        prima di qualsiasi acquisto o noleggio.
+      </p>
+
+      <h2>3. Uso lecito del Sito</h2>
+      <p>L’utente si impegna a utilizzare il Sito in modo lecito e conforme ai presenti Termini, astenendosi da:</p>
+      <ul>
+        <li>attività che possano compromettere la sicurezza o il funzionamento del Sito;</li>
+        <li>invio di contenuti illeciti, offensivi o non veritieri tramite i canali di contatto;</li>
+        <li>utilizzo non autorizzato di testi, immagini o marchi presenti sul Sito.</li>
+      </ul>
+
+      <h2>4. Proprietà intellettuale</h2>
+      <p>
+        Testi, grafica, loghi, layout e contenuti del Sito sono di proprietà di {dealer.nome} o
+        dei rispettivi titolari e sono protetti dalle norme vigenti in materia di diritto d’autore
+        e proprietà industriale. È vietata la riproduzione, anche parziale, senza consenso scritto
+        del titolare.
+      </p>
+
+      <h2>5. Link e servizi di terze parti</h2>
+      <p>
+        Il Sito può contenere collegamenti a siti o servizi di terze parti (es. WhatsApp, Google
+        Maps). {dealer.nome} non controlla tali servizi e non è responsabile dei relativi contenuti
+        o condizioni d’uso. L’accesso avviene sotto la responsabilità dell’utente.
+      </p>
+
+      <h2>6. Limitazione di responsabilità</h2>
+      <p>
+        {dealer.nome} si impegna a mantenere il Sito aggiornato e funzionante, ma non garantisce
+        l’assenza di interruzioni, errori o malfunzionamenti. Nei limiti consentiti dalla legge,
+        {dealer.nome} non risponde di danni indiretti derivanti dall’uso o dall’impossibilità di
+        usare il Sito, salvo dolo o colpa grave.
+      </p>
+
+      <h2>7. Trattamento dei dati personali</h2>
+      <p>
+        Il trattamento dei dati personali è disciplinato dalla{" "}
+        <a href="/privacy/">Privacy Policy</a>, che forma parte integrante dei presenti Termini.
+      </p>
+
+      <h2>8. Modifiche</h2>
+      <p>
+        {dealer.nome} può modificare in qualsiasi momento i presenti Termini. Le versioni
+        aggiornate saranno pubblicate su questa pagina. Si consiglia di consultarle
+        periodicamente.
+      </p>
+
+      <h2>9. Legge applicabile e foro competente</h2>
+      <p>
+        I presenti Termini sono regolati dalla legge italiana. Per ogni controversia relativa
+        all’interpretazione o esecuzione dei presenti Termini, salvo diversa disposizione di legge
+        inderogabile a tutela del consumatore, è competente in via esclusiva il Foro di Isernia.
+      </p>
+
+      <h2>10. Contatti</h2>
+      <p>
+        Per informazioni sui presenti Termini: {dealer.indirizzo} — tel.{" "}
+        <a href={`tel:${dealer.telefono}`}>{dealer.telefonoDisplay}</a>
+        {dealer.email && (
+          <>
+            {" "}— <a href={`mailto:${dealer.email}`}>{dealer.email}</a>
+          </>
+        )}
+        .
+      </p>
+    </article>
+  </main>
+</BaseLayout>

@@ -92,6 +92,13 @@ const cars = await getCars();
             Messaggio
             <textarea name="messaggio" required placeholder="Vorrei info su disponibilità, permuta o prova su strada..."></textarea>
           </label>
+          <label class="contact-form__consent">
+            <input type="checkbox" name="privacy" required />
+            <span>
+              Ho letto l’<a href="/privacy/" target="_blank" rel="noopener">informativa privacy</a> e
+              acconsento al trattamento dei miei dati per rispondere alla mia richiesta.
+            </span>
+          </label>
           <button type="submit" class="btn btn--primary">Invia richiesta</button>
           <p id="form-feedback" style="color: var(--text-muted); font-size: 0.9rem; margin: 0"></p>
         </form>

@@ -1,0 +1,164 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getDealer } from "../lib/dealer";
+
+const dealer = await getDealer();
+const lastUpdate = "27 luglio 2026";
+---
+
+<BaseLayout
+  title={`Privacy Policy — ${dealer.nome}`}
+  description={`Informativa sul trattamento dei dati personali di ${dealer.nome}, ai sensi del Regolamento UE 2016/679 (GDPR).`}
+>
+  <main class="container legal-page">
+    <header class="page-header">
+      <p class="section__eyebrow">Legale</p>
+      <h1 class="section__title">Privacy Policy</h1>
+      <p class="section__lead">Ultimo aggiornamento: {lastUpdate}</p>
+    </header>
+
+    <article class="legal-content">
+      <p>
+        La presente informativa descrive le modalità di trattamento dei dati personali degli utenti
+        che visitano il sito <strong>bcarvenafro.com</strong>, in conformità al Regolamento (UE)
+        2016/679 (“GDPR”) e al D.Lgs. 196/2003 come modificato dal D.Lgs. 101/2018.
+      </p>
+
+      <h2>1. Titolare del trattamento</h2>
+      <p>
+        <strong>{dealer.nome}</strong><br />
+        {dealer.indirizzo}<br />
+        Telefono: <a href={`tel:${dealer.telefono}`}>{dealer.telefonoDisplay}</a>
+        {dealer.email && (
+          <>
+            <br />
+            Email: <a href={`mailto:${dealer.email}`}>{dealer.email}</a>
+          </>
+        )}
+      </p>
+
+      <h2>2. Tipologie di dati trattati</h2>
+      <p>Attraverso il sito possono essere trattati i seguenti dati:</p>
+      <ul>
+        <li>
+          <strong>Dati di navigazione</strong> (indirizzo IP, tipo di browser, pagine visitate, data e
+          ora della visita), raccolti in forma anonima o pseudonimizzata dai sistemi tecnici di
+          hosting.
+        </li>
+        <li>
+          <strong>Dati forniti volontariamente</strong> tramite il modulo contatti o messaggi via
+          email/WhatsApp: nome, cognome, numero di telefono, indirizzo email e contenuto del
+          messaggio.
+        </li>
+        <li>
+          <strong>Dati relativi a cookie e tecnologie simili</strong> eventualmente impostati da
+          servizi di terze parti integrati nel sito (es. mappa Google).
+        </li>
+      </ul>
+
+      <h2>3. Finalità e base giuridica del trattamento</h2>
+      <ul>
+        <li>
+          <strong>Rispondere a richieste di informazioni</strong> (modulo contatti, telefono,
+          WhatsApp, email) — base giuridica: esecuzione di misure precontrattuali su richiesta
+          dell’interessato (art. 6, par. 1, lett. b GDPR) e, ove applicabile, consenso (art. 6,
+          par. 1, lett. a GDPR).
+        </li>
+        <li>
+          <strong>Funzionamento tecnico e sicurezza del sito</strong> — base giuridica: legittimo
+          interesse del titolare (art. 6, par. 1, lett. f GDPR).
+        </li>
+        <li>
+          <strong>Adempimenti di legge</strong> — base giuridica: obbligo legale (art. 6, par. 1,
+          lett. c GDPR).
+        </li>
+      </ul>
+
+      <h2>4. Modalità del trattamento</h2>
+      <p>
+        I dati sono trattati con strumenti informatici e telematici, nel rispetto dei principi di
+        liceità, correttezza, trasparenza, minimizzazione e sicurezza previsti dal GDPR. Il modulo
+        contatti non memorizza i dati su server propri del sito: al momento dell’invio, l’utente
+        viene reindirizzato al proprio client di posta elettronica o a WhatsApp per completare la
+        comunicazione.
+      </p>
+
+      <h2>5. Conservazione dei dati</h2>
+      <p>
+        I dati inviati per richieste di informazioni sono conservati per il tempo necessario a
+        evadere la richiesta e, successivamente, per eventuali obblighi di legge o tutela in sede
+        giudiziaria. I log tecnici del hosting sono conservati per periodi limitati, in linea con le
+        policy del fornitore.
+      </p>
+
+      <h2>6. Comunicazione e destinatari</h2>
+      <p>I dati possono essere trattati da fornitori tecnologici che operano come responsabili del trattamento, tra cui:</p>
+      <ul>
+        <li><strong>Cloudflare, Inc.</strong> — hosting e sicurezza del sito;</li>
+        <li><strong>Sanity.io</strong> — gestione contenuti e immagini del sito;</li>
+        <li><strong>Google LLC</strong> — servizio mappe embedded nella pagina contatti;</li>
+        <li><strong>Meta Platforms / WhatsApp</strong> — qualora l’utente scelga di contattarci via WhatsApp.</li>
+      </ul>
+      <p>
+        L’elenco aggiornato dei responsabili può essere richiesto al titolare ai recapiti indicati
+        sopra.
+      </p>
+
+      <h2>7. Trasferimento dei dati extra UE</h2>
+      <p>
+        Alcuni fornitori sopra indicati possono trattare dati anche al di fuori dello Spazio
+        Economico Europeo. In tali casi, il trasferimento avviene nel rispetto del GDPR, mediante
+        decisioni di adeguatezza della Commissione Europea o clausole contrattuali standard.
+      </p>
+
+      <h2>8. Cookie e servizi di terze parti</h2>
+      <p>
+        Il sito non utilizza cookie di profilazione o strumenti di analisi pubblicitaria di
+        proprietà del titolare. La pagina contatti può includere una mappa Google che può installare
+        cookie o tecnologie simili di terze parti. Per maggiori informazioni consulta la{" "}
+        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
+          privacy policy di Google
+        </a>
+        .
+      </p>
+      <p>
+        Puoi gestire le preferenze sui cookie dal browser (blocco, cancellazione, impostazioni di
+        navigazione privata).
+      </p>
+
+      <h2>9. Natura del conferimento</h2>
+      <p>
+        Il conferimento dei dati per richieste di informazioni è facoltativo, ma necessario per
+        ricevere riscontro. Il mancato conferimento comporta l’impossibilità di evadere la
+        richiesta.
+      </p>
+
+      <h2>10. Diritti dell’interessato</h2>
+      <p>In qualità di interessato, hai diritto di:</p>
+      <ul>
+        <li>accedere ai tuoi dati personali;</li>
+        <li>chiederne la rettifica o la cancellazione;</li>
+        <li>chiedere la limitazione del trattamento;</li>
+        <li>opporti al trattamento basato sul legittimo interesse;</li>
+        <li>richiedere la portabilità dei dati, ove applicabile;</li>
+        <li>revocare il consenso in qualsiasi momento, senza pregiudicare la liceità del trattamento precedente;</li>
+        <li>proporre reclamo al Garante per la protezione dei dati personali (<a href="https://www.garanteprivacy.it" target="_blank" rel="noopener noreferrer">www.garanteprivacy.it</a>).</li>
+      </ul>
+      <p>
+        Per esercitare i tuoi diritti, contattaci a:{" "}
+        {dealer.email ? (
+          <a href={`mailto:${dealer.email}`}>{dealer.email}</a>
+        ) : (
+          <a href={`tel:${dealer.telefono}`}>{dealer.telefonoDisplay}</a>
+        )}
+        .
+      </p>
+
+      <h2>11. Modifiche</h2>
+      <p>
+        Il titolare può aggiornare la presente informativa in qualsiasi momento. Le modifiche
+        saranno pubblicate su questa pagina con indicazione della data di aggiornamento.
+      </p>
+    </article>
+  </main>
+</BaseLayout>
