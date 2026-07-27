@@ -105,14 +105,11 @@ const cars = await getCars();
       </section>
     </div>
 
-    <div class="map-wrap">
-      <iframe
-        title="Mappa concessionaria"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-        allowfullscreen
-        src={dealer.mappaEmbed}
-      />
+    <div class="map-wrap" id="map-container" data-map-src={dealer.mappaEmbed}>
+      <div class="map-placeholder" id="map-placeholder">
+        <p>La mappa è fornita da Google e può utilizzare cookie di terze parti.</p>
+        <button type="button" class="btn btn--primary" id="map-load-btn">Mostra mappa</button>
+      </div>
     </div>
   </main>
 
@@ -120,6 +117,44 @@ const cars = await getCars();
     const form = document.getElementById("contact-form");
     const autoSelect = document.getElementById("contact-auto");
     const feedback = document.getElementById("form-feedback");
+
+    function loadMap() {
+      const container = document.getElementById("map-container");
+      const placeholder = document.getElementById("map-placeholder");
+      const src = container?.dataset.mapSrc;
+      if (!container || !placeholder || !src || container.querySelector("iframe")) return;
+
+      const iframe = document.createElement("iframe");
+      iframe.title = "Mappa concessionaria";
+      iframe.loading = "lazy";
+      iframe.referrerPolicy = "no-referrer-when-downgrade";
+      iframe.allowFullscreen = true;
+      iframe.src = src;
+      container.appendChild(iframe);
+      placeholder.remove();
+    }
+
+    function initMap() {
+      const consent = localStorage.getItem("bcar-cookie-consent");
+      const loadBtn = document.getElementById("map-load-btn");
+
+      if (consent === "accepted") {
+        loadMap();
+        return;
+      }
+
+      loadBtn?.addEventListener("click", () => {
+        localStorage.setItem("bcar-cookie-consent", "accepted");
+        window.dispatchEvent(new CustomEvent("cookie-consent", { detail: "accepted" }));
+        loadMap();
+      });
+    }
+
+    window.addEventListener("cookie-consent", (event) => {
+      if (event.detail === "accepted") loadMap();
+    });
+
+    initMap();
 
     const params = new URLSearchParams(window.location.search);
     const autoId = params.get("auto");

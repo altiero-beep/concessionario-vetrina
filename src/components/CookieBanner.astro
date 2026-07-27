@@ -1,0 +1,71 @@
+<div id="cookie-banner" class="cookie-banner" hidden role="dialog" aria-labelledby="cookie-banner-title" aria-live="polite">
+  <div class="cookie-banner__inner container">
+    <div class="cookie-banner__text">
+      <p id="cookie-banner-title" class="cookie-banner__title">Utilizzo dei cookie</p>
+      <p class="cookie-banner__desc">
+        Usiamo cookie tecnici necessari al funzionamento del sito. Con il tuo consenso possiamo
+        caricare anche servizi di terze parti (es. Google Maps). Puoi accettare, rifiutare o
+        leggere l’<a href="/privacy/">informativa privacy</a>.
+      </p>
+    </div>
+    <div class="cookie-banner__actions">
+      <button type="button" class="btn btn--ghost" id="cookie-reject">Solo necessari</button>
+      <button type="button" class="btn btn--primary" id="cookie-accept">Accetta tutti</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const STORAGE_KEY = "bcar-cookie-consent";
+
+  type Consent = "accepted" | "rejected";
+
+  function getConsent(): Consent | null {
+    const value = localStorage.getItem(STORAGE_KEY);
+    return value === "accepted" || value === "rejected" ? value : null;
+  }
+
+  function setConsent(value: Consent) {
+    localStorage.setItem(STORAGE_KEY, value);
+    window.dispatchEvent(new CustomEvent("cookie-consent", { detail: value }));
+  }
+
+  function hideBanner() {
+    document.getElementById("cookie-banner")?.setAttribute("hidden", "");
+  }
+
+  function showBanner() {
+    document.getElementById("cookie-banner")?.removeAttribute("hidden");
+  }
+
+  function initCookieBanner() {
+    const banner = document.getElementById("cookie-banner");
+    if (!banner) return;
+
+    if (!getConsent()) showBanner();
+
+    document.getElementById("cookie-accept")?.addEventListener("click", () => {
+      setConsent("accepted");
+      hideBanner();
+    });
+
+    document.getElementById("cookie-reject")?.addEventListener("click", () => {
+      setConsent("rejected");
+      hideBanner();
+    });
+
+    document.querySelectorAll("[data-cookie-settings]").forEach((el) => {
+      el.addEventListener("click", (e) => {
+        e.preventDefault();
+        showBanner();
+      });
+    });
+  }
+
+  initCookieBanner();
+
+  (window as Window & { bcarCookieConsent?: { get: typeof getConsent; set: typeof setConsent } }).bcarCookieConsent = {
+    get: getConsent,
+    set: setConsent,
+  };
+</script>
