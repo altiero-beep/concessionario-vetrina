@@ -67,11 +67,23 @@ Oppure togli la spunta **Publish** per nasconderla senza cancellarla.
 
 ---
 
-## Caricare le foto
+## Caricare le foto (più di una)
 
-- Trascina le immagini nel campo **Foto**
-- La prima foto è quella principale
-- Consiglio: 3–5 foto orizzontali, buona luce
+Il sito accetta **più foto per ogni auto**. Ecco come:
+
+### Metodo 1 — Tutte insieme (più veloce)
+1. Apri l'auto in **Parco auto**
+2. Nel campo **Foto**, **trascina 3–5 immagini insieme** dal computer (selezionale prima con il mouse)
+3. Sanity le carica tutte in una volta
+
+### Metodo 2 — Una alla volta
+1. Carica la prima foto
+2. Clicca **Add item** (o **Aggiungi elemento**) sotto la foto
+3. Carica la seconda, terza, ecc.
+
+**Importante:** la **prima foto** è quella che appare nel parco auto. Le altre si vedono aprendo la scheda dell'auto.
+
+Consiglio: 3–5 foto, orizzontali se possibile, buona luce.
 
 ---
 

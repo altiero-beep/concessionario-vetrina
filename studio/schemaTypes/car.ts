@@ -53,7 +53,10 @@ export const car = defineType({
       name: "immagini",
       title: "Foto",
       type: "array",
-      of: [{ type: "image", options: { hotspot: true } }],
+      of: [{ type: "image", options: { hotspot: false } }],
+      options: { layout: "grid" },
+      description:
+        "Puoi caricare più foto: trascina 3–5 immagini insieme dal computer, oppure clicca «Add item» / «Aggiungi» per aggiungerne una alla volta. La prima foto è la copertina nel parco auto.",
       validation: (rule) => rule.min(1).error("Carica almeno una foto"),
     }),
     defineField({

@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
+Sitemap: https://bcarvenafro.com/sitemap.xml
 Sitemap: https://bcarvenafro.com/sitemap-index.xml

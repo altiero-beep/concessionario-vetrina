@@ -300,20 +300,23 @@ ul {
 
 .car-card__image-link {
   position: relative;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   aspect-ratio: 16 / 10;
   overflow: hidden;
+  background: var(--bg-elevated);
 }
 
 .car-card__image-link img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   transition: transform 0.35s;
 }
 
 .car-card:hover .car-card__image-link img {
-  transform: scale(1.04);
+  transform: scale(1.02);
 }
 
 .car-card__year {
@@ -436,17 +439,21 @@ ul {
 }
 
 .gallery__main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   aspect-ratio: 16 / 10;
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--border);
   margin-bottom: 1rem;
+  background: var(--bg-elevated);
 }
 
 .gallery__main img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .gallery__thumbs {
@@ -463,7 +470,7 @@ ul {
   border: 2px solid transparent;
   cursor: pointer;
   padding: 0;
-  background: none;
+  background: var(--bg-elevated);
 }
 
 .gallery__thumb.is-active,
@@ -474,7 +481,7 @@ ul {
 .gallery__thumb img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .detail-panel {
