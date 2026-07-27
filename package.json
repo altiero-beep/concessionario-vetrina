@@ -6,15 +6,21 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
+    "preview": "npm run build && wrangler dev",
     "studio": "npm run dev --prefix studio",
     "studio:deploy": "npm run deploy --prefix studio",
-    "seed": "node scripts/seed-sanity.mjs"
+    "seed": "node scripts/seed-sanity.mjs",
+    "deploy": "npm run build && wrangler deploy",
+    "cf-typegen": "wrangler types"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "12",
     "@astrojs/sitemap": "^3.7.3",
     "@sanity/client": "^6.28.4",
     "@sanity/image-url": "^1.1.0",
     "astro": "^5.7.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.114.0"
   }
 }
