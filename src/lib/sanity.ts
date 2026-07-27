@@ -23,7 +23,9 @@ export function urlFor(source: SanityImageSource): string {
 export function imageUrlFromSanity(image: unknown): string {
   if (!image || typeof image !== "object") return "";
   if ("asset" in image && image.asset) {
-    return urlFor(image as SanityImageSource);
+    const img = image as { asset: SanityImageSource };
+    // Usa solo l'asset originale, senza crop/hotspot salvati in Sanity
+    return builder.image({ asset: img.asset }).width(1200).fit("max").auto("format").url();
   }
   return "";
 }
