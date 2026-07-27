@@ -49,10 +49,13 @@ const year = new Date().getFullYear();
           <a href="/parco-auto/">Parco auto</a>
           <a href="/#noleggio">Noleggio</a>
           <a href="/contatti/">Contatti</a>
-          <a href="/privacy/">Privacy</a>
-          <a href="/termini/">Termini</a>
           <a href={`tel:${dealer.telefono}`}>{dealer.telefonoDisplay}</a>
         </div>
+      </div>
+      <div class="container site-footer__legal">
+        <a href="/privacy/">Privacy Policy</a>
+        <span aria-hidden="true">·</span>
+        <a href="/termini/">Termini e condizioni</a>
       </div>
     </footer>
 
